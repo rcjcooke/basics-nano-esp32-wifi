@@ -118,9 +118,15 @@ void loop() {
   if (client) {
     while (client.connected()) {
       // Read any data available and echo it out to the serial interface
-      while (client.available() > 0) {
-        char c = client.read();
-        Serial.write(c);
+      while (client.available() > 0 || Serial.available() > 0) {
+        if (client.available() > 0) {
+          char c = client.read();
+          Serial.write(c);
+        }
+        if (Serial.available() > 0) {
+          char c = Serial.read();
+          client.write(c);
+        }
       }
     }
  
